@@ -1,0 +1,51 @@
+/*
+ * main.c
+ *
+ *  Created on: Sep 22, 2025
+ *      Author: bavly
+ */
+
+#include "../HAL/lcd.h"
+#include "../HAL/lm35_sensor.h"
+#include "std_types.h"
+#include <util/delay.h>
+enum state{
+	OFF,ON
+}Fan_state;
+uint8 Temperature=0;
+void Update_Screen(void)
+{
+	LCD_clearScreen();
+	LCD_displayString("FAN is");
+	LCD_moveCursor(0,7);
+	if(Fan_state)
+	{
+		LCD_displayString("ON");
+	}
+	else
+	{
+		LCD_displayString("OFF");
+	}
+	LCD_moveCursor(1,0);
+	LCD_displayString("Temp=");
+	LCD_moveCursor(1,6);
+	LCD_intgerToString(Temperature);
+	/*LCD_moveCursor(1,10);
+	LCD_displayString("LDR=");*/
+}
+int main(void)
+{
+	/*Variables*/
+
+	/* set up devices*/
+	LCD_init();
+	LM35_init();
+
+	while(1)
+	{
+		//Temperature=LM35_getTemperature();
+		Update_Screen();
+		_delay_ms(200);
+	}
+
+}

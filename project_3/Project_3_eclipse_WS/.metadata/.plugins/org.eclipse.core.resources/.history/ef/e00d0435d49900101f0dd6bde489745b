@@ -1,0 +1,36 @@
+/*
+ * led.h
+ *
+ *  Created on: Sep 23, 2025
+ *      Author: bavly
+ */
+
+#ifndef HAL_LED_H_
+#define HAL_LED_H_
+#include "../MCAL/gpio.h"
+#include "std_types.h"
+#include "common_macros.h"
+#define RED_LED_PORT_ID PORTB_ID
+#define GREEN_LED_PORT_ID PORTB_ID
+#define BLUE_LED_PORT_ID PORTB_ID
+
+#define RED_LED_ID PIN5_ID
+#define GREEN_LED_ID PIN6_ID
+#define BLUE_LED_ID PIN7_ID
+
+
+#define LED_LOGIC_HIGH LOGIC_HIGH
+#define LED_LOGIC_LOW LOGIC_LOW
+typedef enum
+{
+	RED_LED,GREEN_LED,BLUE_LED
+}LED_ID;
+
+void LEDS_init(void);
+
+void LED_on(LED_ID id);
+
+void LED_off(LED_ID id);
+
+
+#endif /* HAL_LED_H_ */

@@ -1,0 +1,117 @@
+/*
+ * main.c
+ *
+ *  Created on: Sep 22, 2025
+ *      Author: bavly
+ */
+
+#include "../HAL/lcd.h"
+#include "../HAL/lm35_sensor.h"
+#include "../HAL/ldr.h"
+#include "../HAL/led.h"
+#include "../HAL/dc_motor.h"
+#include "../HAL/buzzer.h"
+#include "../HAL/flame_sensor.h"
+#include "std_types.h"
+#include <util/delay.h>
+enum state{
+	OFF,ON
+}Fan_state;
+uint8 Temperature=0;
+uint16 Light_Intensity=0;
+void Fan_Speed_Control(void)
+{
+
+	if(Temperature >= 40)
+	{
+		DcMotor_Rotate(CW,100);
+	}
+	else if(Temperature >= 35 && Temperature < 40)
+	{
+		DcMotor_Rotate(CW,75);
+	}
+	else if(Temperature >= 30 && Temperature < 35)
+	{
+		DcMotor_Rotate(CW,50);
+	}
+	else if(Temperature >= 25 && Temperature < 30)
+	{
+		DcMotor_Rotate(CW,25);
+	}
+	else if(Temperature < 25)
+	{
+		DcMotor_Rotate(CW,0);
+	}
+
+
+}
+void Light_Control()
+{
+	if(Light_Intensity>70)
+	{
+		LED_off(RED_LED);
+		LED_off(GREEN_LED);
+		LED_off(BLUE_LED);
+	}
+	else if(Light_Intensity <= 70 && Light_Intensity >=51)
+	{
+		LED_on(RED_LED);
+		LED_off(GREEN_LED);
+		LED_off(BLUE_LED);
+	}
+	else if(Light_Intensity <= 50 && Light_Intensity >=16)
+	{
+		LED_on(RED_LED);
+		LED_on(GREEN_LED);
+		LED_off(BLUE_LED);
+	}
+	else if(Light_Intensity <= 15 )
+	{
+		LED_on(RED_LED);
+		LED_on(GREEN_LED);
+		LED_on(BLUE_LED);
+	}
+}
+void Update_Screen(void)
+{
+	LCD_clearScreen();
+	LCD_displayString("FAN is");
+	LCD_moveCursor(0,7);
+	if(Fan_state)
+	{
+		LCD_displayString("ON");
+	}
+	else
+	{
+		LCD_displayString("OFF");
+	}
+	LCD_moveCursor(1,0);
+	LCD_displayString("Temp=");
+	LCD_moveCursor(1,6);
+	LCD_intgerToString(Temperature);
+	LCD_moveCursor(1,9);
+	LCD_displayString("LDR=");
+	LCD_intgerToString(Light_Intensity);
+}
+int main(void)
+{
+
+
+	/* set up devices*/
+	LCD_init();
+	LM35_init();
+	LEDS_init();
+	DcMotor_Init();
+	Buzzer_init();
+
+	while(1)
+	{
+		Temperature=LM35_getTemperature();
+		Light_Intensity=LDR_getLightIntensity();
+		Update_Screen();
+		Light_Control();
+		Fan_Speed_Control();
+		_delay_ms(200);
+	}
+
+}

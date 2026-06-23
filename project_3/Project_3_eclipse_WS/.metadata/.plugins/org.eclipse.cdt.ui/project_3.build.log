@@ -1,0 +1,36 @@
+09:47:48 **** Incremental Build of configuration Debug for project project_3 ****
+make all 
+Building file: ../APP/system_control.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"APP/system_control.d" -MT"APP/system_control.o" -c -o "APP/system_control.o" "../APP/system_control.c"
+In file included from ../APP/system_control.c:22:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+Finished building: ../APP/system_control.c
+ 
+Building target: project_3.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,project_3.map -mmcu=atmega32 -o "project_3.elf"  ./MCAL/adc.o ./MCAL/gpio.o ./MCAL/pwm.o  ./HAL/buzzer.o ./HAL/dc_motor.o ./HAL/flame_sensor.o ./HAL/lcd.o ./HAL/ldr.o ./HAL/led.o ./HAL/lm35_sensor.o  ./APP/main.o ./APP/system_control.o   
+Finished building target: project_3.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S project_3.elf  >"project_3.lss"
+Finished building: project_3.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 project_3.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   11192 bytes (34.2% Full)
+(.text + .data + .bootloader)
+
+Data:        315 bytes (15.4% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+09:47:49 Build Finished. 0 errors, 1 warnings. (took 920ms)
+

@@ -1,0 +1,23 @@
+/*
+ * flame_sensor.h
+ *
+ *  Created on: Sep 24, 2025
+ *      Author: bavly
+ */
+
+#ifndef HAL_FLAME_SENSOR_H_
+#define HAL_FLAME_SENSOR_H_
+
+#include "../MCAL/gpio.h"
+#include "std_types.h"
+#include "common_macros.h"
+
+#define FLAME_SENSOR_PORT_ID PORTD_ID
+#define FLAME_SENSOR_PIN_ID  PIN2_ID
+
+void FlameSensor_init(void);
+
+uint8 FlameSensor_getValue(void) ;
+
+
+#endif /* HAL_FLAME_SENSOR_H_ */

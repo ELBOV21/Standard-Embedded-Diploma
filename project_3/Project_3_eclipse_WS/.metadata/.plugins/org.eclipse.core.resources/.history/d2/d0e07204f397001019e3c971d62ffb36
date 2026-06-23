@@ -1,0 +1,33 @@
+/******************************************************************************
+ *
+ * Module: Temperature Sensor
+ *
+ * File Name: lm35_sensor.h
+ *
+ * Description: Header file for the LM35 Temperature Sensor driver
+ *
+ * Author: Bavly Maged
+ *
+ *******************************************************************************/
+
+#ifndef LM35_SENSOR_H_
+#define LM35_SENSOR_H_
+
+#include "std_types.h"
+
+/*******************************************************************************
+ *                                Definitions                                  *
+ *******************************************************************************/
+
+#define SENSOR_CHANNEL_ID       2     /* Example: LM35 connected to ADC2 */
+#define SENSOR_MAX_TEMPERATURE  150   /* LM35 max temperature (°C) */
+#define SENSOR_MAX_VOLT_VALUE   1.5   /* At 150°C → 1.5V */
+
+
+/*******************************************************************************
+ *                      Functions Prototypes                                   *
+ *******************************************************************************/
+
+uint8 LM35_getTemperature(void);
+
+#endif /* LM35_SENSOR_H_ */

@@ -1,0 +1,15 @@
+/*
+ * led.c
+ *
+ *  Created on: Sep 23, 2025
+ *      Author: bavly
+ */
+
+#include "led.h"
+#include "std_types.h"
+
+void LEDS_init(void);
+
+void LED_on(LED_ID id);
+
+void LED_off(LED_ID id);

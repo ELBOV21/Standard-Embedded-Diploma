@@ -1,0 +1,117 @@
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
+#define TICKS_PER_SEC 15624
+#define NUMBER_OF_SCREENS 6
+enum Display {
+    H1, H0,M1,M0,S1,S0
+};
+enum Display Screen=H1;
+enum Mode {
+    Count_down, Count_up
+};
+enum Mode Timer_mode = Count_up;
+
+unsigned char hours=0, mins=0, seconds=0;
+
+void Setup_display()
+{
+    DDRC |= 0x0F;   // decoder input (BCD to 7-seg)
+    PORTC &= 0xF0;
+
+    DDRA |= 0x3F;   // digit enable pins
+    PORTA |= 0x3F;  // disable all digits initially
+}
+
+// Refresh a single digit
+void Display_Digit(unsigned char digit, unsigned char value)
+{
+    PORTA &= 0xC0;         // disable all digits
+    PORTA |= (1<<digit);   // enable one digit
+    PORTC &= 0xF0;         // clear old value
+    PORTC |= (value & 0x0F); // send new BCD value
+}
+
+// Update time once per second
+ISR(TIMER1_COMPA_vect)
+{
+    if (Timer_mode == Count_up) {
+        seconds++;
+        if(seconds >= 60) { seconds = 0; mins++; }
+        if(mins >= 60)    { mins = 0; hours++; }
+        if(hours >= 24)   { hours = 0; }
+    }
+    else if(Timer_mode == Count_down)
+    {
+    	if(seconds == 0 && mins == 0 && hours == 0) {
+    	    // Timer finished
+    	} else {
+    	    if(seconds > 0) {
+    	        seconds--;
+    	    } else {
+    	        seconds = 59;
+    	        if(mins > 0) {
+    	            mins--;
+    	        } else {
+    	            mins = 59;
+    	            if(hours > 0) {
+    	                hours--;
+    	            }
+    	        }
+    	    }
+    	}
+    }
+}
+void Reset_Timer()
+{
+seconds=0;mins=0;hours=0;
+}
+ISR(INT0_vect)
+{
+	Reset_Timer();
+}
+
+/* External INT0 enable and configuration function */
+void INT0_Init(void)
+{
+	DDRD  &= (~(1<<PD2));               // Configure INT0/PD2 as input pin
+	PORTD |=(1<<PD2);//enable internal pull_up
+	MCUCR |=  (1<<ISC01);   // Trigger INT0 with the falling edge
+	GICR  |= (1<<INT0);                 // Enable external interrupt pin INT0
+	SREG  |= (1<<7);                    // Enable interrupts by setting I-bit
+}
+
+void Timer1_Init_COMP_Mode()
+{
+    TCNT1 = 0; //set Timer initially to Zero
+    OCR1A = TICKS_PER_SEC;               // 1 second (16MHz / 1024)
+    TIMSK |= (1<<OCIE1A);        // enable compare A interrupt
+    TCCR1A = (1<<FOC1A);
+    TCCR1B = (1<<WGM12) | (1<<CS12) | (1<<CS10); // CTC, clk/1024
+}
+
+int main()
+{
+	INT0_Init();
+    Setup_display();
+    sei();
+    Timer1_Init_COMP_Mode();
+
+
+
+    while(1)
+    {
+        // refresh each digit quickly
+        switch(Screen) {
+            case H1: Display_Digit(PA0, hours/10); break;
+            case H0: Display_Digit(PA1, hours%10); break;
+            case M1: Display_Digit(PA2, mins/10);  break;
+            case M0: Display_Digit(PA3, mins%10);  break;
+            case S1: Display_Digit(PA4, seconds/10); break;
+            case S0: Display_Digit(PA5, seconds%10); break;
+        }
+        Screen = (Screen + 1) % NUMBER_OF_SCREENS;
+
+        _delay_ms(2); // small delay for persistence of vision
+    }
+}

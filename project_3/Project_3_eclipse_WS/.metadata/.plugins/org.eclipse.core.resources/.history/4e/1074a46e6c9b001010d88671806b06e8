@@ -1,0 +1,10 @@
+#include "system_control.h"
+
+int main(void)
+{
+    System_Init();   // Initialize all devices
+
+    while(1) {
+        System_Update(); // Continuously update system behavior
+    }
+}

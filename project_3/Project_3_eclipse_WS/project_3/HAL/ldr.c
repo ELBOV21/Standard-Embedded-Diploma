@@ -1,0 +1,30 @@
+/******************************************************************************
+ *
+ * Module: LDR
+ *
+ * File Name: ldr.h
+ *
+ * Description: Header file for Ldr driver
+ *
+ * Author: Bavly Maged
+ *
+ *******************************************************************************/
+
+#include "ldr.h"
+#include "std_types.h"
+#include "../MCAL/adc.h"
+
+uint16 LDR_getLightIntensity()
+{
+	uint16 adc_value = 0;
+	    uint16 ldr_value = 0;
+
+	    /* Read ADC channel where the temperature sensor is connected */
+	    adc_value = ADC_read(LDR_SENSOR_CHANNEL_ID);
+
+	    /* LM35: 10mV per °C => Temp = (ADC_value * Vref * 1000) / (ADC_max * 10) */
+	    ldr_value = ((uint32)adc_value * LDR_SENSOR_MAX_LIGHT_INTENSITY) / ADC_MAXIMUM_VALUE;
+
+
+	    return ldr_value;
+}

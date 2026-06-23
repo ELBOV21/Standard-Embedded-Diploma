@@ -1,0 +1,42 @@
+################################################################################
+# Automatically-generated file. Do not edit!
+################################################################################
+
+# Add inputs and outputs from these tool invocations to the build variables 
+C_SRCS += \
+../HAL/buzzer.c \
+../HAL/dc_motor.c \
+../HAL/flame_sensor.c \
+../HAL/lcd.c \
+../HAL/ldr.c \
+../HAL/led.c \
+../HAL/lm35_sensor.c 
+
+OBJS += \
+./HAL/buzzer.o \
+./HAL/dc_motor.o \
+./HAL/flame_sensor.o \
+./HAL/lcd.o \
+./HAL/ldr.o \
+./HAL/led.o \
+./HAL/lm35_sensor.o 
+
+C_DEPS += \
+./HAL/buzzer.d \
+./HAL/dc_motor.d \
+./HAL/flame_sensor.d \
+./HAL/lcd.d \
+./HAL/ldr.d \
+./HAL/led.d \
+./HAL/lm35_sensor.d 
+
+
+# Each subdirectory must supply rules for building sources it contributes
+HAL/%.o: ../HAL/%.c HAL/subdir.mk
+	@echo 'Building file: $<'
+	@echo 'Invoking: AVR Compiler'
+	avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -c -o "$@" "$<"
+	@echo 'Finished building: $<'
+	@echo ' '
+
+

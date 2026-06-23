@@ -1,0 +1,47 @@
+/******************************************************************************
+ *
+ * Module: Temperature Sensor
+ *
+ * File Name: lm35_sensor.h
+ *
+ * Description: Header file for the LM35 Temperature Sensor driver
+ *
+ * Author: Bavly Maged
+ *
+ *******************************************************************************/
+
+#ifndef LM35_SENSOR_H_
+#define LM35_SENSOR_H_
+
+#include "std_types.h"
+#include "../MCAL/adc.h"
+
+/*******************************************************************************
+ *                                Configurations                               *
+ *******************************************************************************/
+
+/* Select which ADC channel the LM35 is connected to */
+#define SENSOR_CHANNEL_ID       CH_1
+
+/* Select ADC reference voltage */
+#define LM35_ADC_VREF           REF_256V      /* REF_AVCC, REF_AREF, REF_256V */
+
+/* Select ADC prescaler */
+#define LM35_ADC_SCALER         ADC_SCALER_128  /* example: ADC_SCALER_2, 4, 8, 16, 32, 64, 128 */
+
+/* LM35 Sensor properties */
+#define SENSOR_MAX_TEMPERATURE  150   /* Max 150 °C */
+#define SENSOR_MAX_VOLT_VALUE   1.5   /* 1.5V at 150°C */
+
+
+/*******************************************************************************
+ *                      Functions Prototypes                                   *
+ *******************************************************************************/
+
+/* Initialize LM35 (internally initializes ADC with required settings) */
+void LM35_init(void);
+
+/* Get current temperature in Celsius */
+uint8 LM35_getTemperature(void);
+
+#endif /* LM35_SENSOR_H_ */

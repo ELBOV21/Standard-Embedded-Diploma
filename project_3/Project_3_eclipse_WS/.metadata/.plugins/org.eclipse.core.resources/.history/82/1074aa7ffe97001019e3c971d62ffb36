@@ -1,0 +1,13 @@
+/*
+ * ldr.h
+ *
+ *  Created on: Sep 23, 2025
+ *      Author: bavly
+ */
+
+#ifndef HAL_LDR_H_
+#define HAL_LDR_H_
+
+
+
+#endif /* HAL_LDR_H_ */

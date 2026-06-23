@@ -1,0 +1,13 @@
+/*
+ * flame_sensor.h
+ *
+ *  Created on: Sep 24, 2025
+ *      Author: bavly
+ */
+
+#ifndef HAL_FLAME_SENSOR_H_
+#define HAL_FLAME_SENSOR_H_
+
+
+
+#endif /* HAL_FLAME_SENSOR_H_ */

@@ -1,0 +1,35 @@
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include "display.h"
+#include "timer.h"
+#include "interrupts.h"
+#include "input.h"
+#include "buzzer.h"
+
+unsigned char hours=0, mins=0, seconds=0;
+unsigned char Is_Paused=0;
+
+int main(void)
+{
+    DDRD |=0X30;
+    PORTD |=(1<<PD4); // red LED ON
+    PORTD &=~(1<<PD5); // yellow LED OFF
+
+    Count_Down_Setup();
+    Buzzer_Setup();
+    INT0_Init();
+    INT1_Init();
+    INT2_Init();
+    Setup_display();
+    Timer1_Init_COMP_Mode();
+    sei();
+
+    while(1)
+    {
+        Display_Screen();
+        if(Is_Paused){
+            Adjust_Time();
+            Check_Mode();
+        }
+    }
+}

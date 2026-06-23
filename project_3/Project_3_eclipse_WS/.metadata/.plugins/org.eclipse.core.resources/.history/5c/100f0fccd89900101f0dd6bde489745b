@@ -1,0 +1,14 @@
+#include "system_control.h"
+
+/*
+ * Entry point of the program.
+ * Initializes the system and runs it in an infinite loop.
+ */
+int main(void)
+{
+    System_Init();   // Initialize all devices
+
+    while(1) {
+        System_Update(); // Continuously update system behavior
+    }
+}

@@ -1,0 +1,176 @@
+/******************************************************************************
+ *
+ * Module:
+ *
+ * File Name: system_control.h
+ *
+ * Description: Header file for the system control
+ *
+ * Author: Bavly Maged
+ *
+ *******************************************************************************/
+
+
+#include "../HAL/lcd.h"
+#include "../HAL/lm35_sensor.h"
+#include "../HAL/ldr.h"
+#include "../HAL/led.h"
+#include "../HAL/dc_motor.h"
+#include "../HAL/buzzer.h"
+#include "../HAL/flame_sensor.h"
+#include "system_control.h"
+#include <util/delay.h>
+
+/* ===== Private  variables ===== */
+static uint8 Temperature = 0;        /* Stores temperature sensor reading*/
+static uint16 Light_Intensity = 0;   /* Stores LDR sensor reading*/
+static uint8 Flame_reading = 0;      /* Stores flame sensor reading*/
+static FanState Fan_state = FAN_OFF; /* Tracks fan state (ON/OFF)*/
+static uint8 screenNeedsInit = 1;    /*Tracks if screen needs reinititalization*/
+/* ===== Private helper functions ===== */
+static void Fire_Alert(void);       /* Handles fire detection and alert*/
+static void Fan_Speed_Control(void);/* Controls fan speed based on temperature*/
+static void Light_Control(void);    /* Controls LEDs based on light intensity*/
+static void Update_Screen(void);    /* Updates LCD with system status*/
+
+/*
+ * Initialize all hardware devices used in the system.
+ */
+void System_Init(void)
+{
+    LCD_init();        /* Initialize LCD*/
+    LM35_init();       /* Initialize temperature sensor*/
+    LEDS_init();       /* Initialize LEDs*/
+    DcMotor_Init();    /* Initialize DC motor (fan)*/
+    Buzzer_init();     /* Initialize buzzer*/
+}
+
+/*
+ * Reads sensors, updates actuators, and handles fire alerts.
+ * Called repeatedly inside the main loop.
+ */
+void System_Update(void)
+{
+    Temperature    = LM35_getTemperature();
+    Light_Intensity= LDR_getLightIntensity();
+    Flame_reading  = FlameSensor_getValue();
+
+    Light_Control();
+    Fan_Speed_Control();
+
+    if(Flame_reading) {
+        Fire_Alert();
+        screenNeedsInit = 1; // Force redraw after alert
+    } else {
+        if(screenNeedsInit) {
+            LCD_clearScreen();
+            LCD_moveCursor(0,0);
+            LCD_displayString("FAN: ");
+            LCD_moveCursor(1,0);
+            LCD_displayString("Temp=");
+            LCD_moveCursor(1,9);
+            LCD_displayString("LDR=");
+            screenNeedsInit = 0; // Labels already drawn
+        }
+        Update_Screen();
+        Buzzer_off();
+    }
+
+    _delay_ms(200);
+}
+
+/* ===== Local helper implementations ===== */
+
+/*
+ * Displays critical fire alert message on LCD
+ * and activates buzzer for warning.
+ */
+static void Fire_Alert(void)
+{
+    LCD_clearScreen();
+    LCD_moveCursor(0,1);
+    LCD_displayString("Critical alert!");
+    Buzzer_on();
+}
+
+/*
+ * Adjusts fan speed according to temperature:
+ * - >=40°C : 100%
+ * - 35–39°C: 75%
+ * - 30–34°C: 50%
+ * - 25–29°C: 25%
+ * - <25°C  : OFF
+ */
+static void Fan_Speed_Control(void)
+{
+    Fan_state = FAN_ON;
+
+    if(Temperature >= 40) {
+        DcMotor_Rotate(CW,100);
+    } else if(Temperature >= 35) {
+        DcMotor_Rotate(CW,75);
+    } else if(Temperature >= 30) {
+        DcMotor_Rotate(CW,50);
+    } else if(Temperature >= 25) {
+        DcMotor_Rotate(CW,25);
+    } else {
+        DcMotor_Rotate(CW,0);
+        Fan_state = FAN_OFF;
+    }
+}
+
+/*
+ * Controls LEDs based on light intensity:
+ * - >70   : All OFF
+ * - 51–70 : RED ON
+ * - 16–50 : RED + GREEN ON
+ * - <=15  : RED + GREEN + BLUE ON
+ */
+static void Light_Control(void)
+{
+    if(Light_Intensity > 70) {
+        LED_off(RED_LED);
+        LED_off(GREEN_LED);
+        LED_off(BLUE_LED);
+    } else if(Light_Intensity >= 51) {
+        LED_on(RED_LED);
+        LED_off(GREEN_LED);
+        LED_off(BLUE_LED);
+    } else if(Light_Intensity >= 16) {
+        LED_on(RED_LED);
+        LED_on(GREEN_LED);
+        LED_off(BLUE_LED);
+    } else {
+        LED_on(RED_LED);
+        LED_on(GREEN_LED);
+        LED_on(BLUE_LED);
+    }
+}
+
+/*
+ * Updates LCD with current system status:
+ * - FAN state (ON/OFF)
+ * - Temperature reading
+ * - Light intensity value
+ */
+static void Update_Screen(void)
+{
+    LCD_clearScreen();
+
+    /* Show fan state */
+    LCD_displayString("FAN is ");
+    if(Fan_state == FAN_ON) {
+        LCD_displayString("ON");
+    } else {
+        LCD_displayString("OFF");
+    }
+
+    /* Show temperature and light sensor readings */
+    LCD_moveCursor(1,0);
+    LCD_displayString("Temp=");
+    LCD_intgerToString(Temperature);
+
+    LCD_displayString(" LDR=");
+    LCD_intgerToString(Light_Intensity);
+    LCD_displayCharacter('%');
+}

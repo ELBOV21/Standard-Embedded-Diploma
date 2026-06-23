@@ -1,0 +1,13 @@
+/*
+ * ldr.c
+ *
+ *  Created on: Sep 23, 2025
+ *      Author: bavly
+ */
+#include "ldr.h"
+#include "std_types.h"
+
+uint16 LDR_getLightIntensity()
+{
+
+}

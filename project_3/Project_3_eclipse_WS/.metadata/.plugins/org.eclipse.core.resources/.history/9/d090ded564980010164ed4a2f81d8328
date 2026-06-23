@@ -1,0 +1,13 @@
+/*
+ * dc_motor.h
+ *
+ *  Created on: Sep 23, 2025
+ *      Author: bavly
+ */
+
+#ifndef HAL_DC_MOTOR_H_
+#define HAL_DC_MOTOR_H_
+
+
+
+#endif /* HAL_DC_MOTOR_H_ */

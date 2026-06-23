@@ -1,0 +1,15 @@
+
+
+
+
+#include "flame_sensor.h"
+#include "std_types.h"
+void FlameSensor_init(void)
+{
+
+	}
+
+uint8 FlameSensor_getValue(void)
+{
+
+}
