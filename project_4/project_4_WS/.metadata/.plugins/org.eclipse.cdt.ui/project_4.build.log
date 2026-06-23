@@ -1,0 +1,55 @@
+22:44:49 **** Incremental Build of configuration Debug for project project_4 ****
+make all 
+Building file: ../MCAL/icu.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"MCAL/icu.d" -MT"MCAL/icu.o" -c -o "MCAL/icu.o" "../MCAL/icu.c"
+../MCAL/icu.c: In function 'ICU_setCallBack':
+../MCAL/icu.c:82: warning: function return types not compatible due to 'volatile'
+Finished building: ../MCAL/icu.c
+ 
+Building file: ../HAL/ultrasonic.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"HAL/ultrasonic.d" -MT"HAL/ultrasonic.o" -c -o "HAL/ultrasonic.o" "../HAL/ultrasonic.c"
+In file included from ../HAL/ultrasonic.c:17:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+Finished building: ../HAL/ultrasonic.c
+ 
+Building file: ../APP/app.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"APP/app.d" -MT"APP/app.o" -c -o "APP/app.o" "../APP/app.c"
+In file included from ../APP/app.c:7:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+Finished building: ../APP/app.c
+ 
+Building file: ../APP/main.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=16000000UL -MMD -MP -MF"APP/main.d" -MT"APP/main.o" -c -o "APP/main.o" "../APP/main.c"
+Finished building: ../APP/main.c
+ 
+Building target: project_4.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,project_4.map -mmcu=atmega32 -o "project_4.elf"  ./MCAL/gpio.o ./MCAL/icu.o  ./HAL/buzzer.o ./HAL/lcd.o ./HAL/led.o ./HAL/ultrasonic.o  ./APP/app.o ./APP/main.o   
+Finished building target: project_4.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S project_4.elf  >"project_4.lss"
+Finished building: project_4.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 project_4.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   13598 bytes (41.5% Full)
+(.text + .data + .bootloader)
+
+Data:        315 bytes (15.4% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+22:44:51 Build Finished. 0 errors, 3 warnings. (took 1s.769ms)
+

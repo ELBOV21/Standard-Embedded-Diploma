@@ -1,0 +1,30 @@
+/*
+ * main.c
+ *
+ *  Created on: Sep 28, 2025
+ *      Author: bavly
+ */
+
+#include "../HAL/buzzer.h"
+#include "../HAL/lcd.h"
+#include "../HAL/ultrasonic.h"
+#include "../HAL/led.h"
+#include "../MCAL/std_types.h"
+#include <util/delay.h>
+uint16 distance=0;
+int main(void)
+{
+	LEDS_init();
+	Ultrasonic_init();
+	Buzzer_init();
+	LCD_init();
+	LCD_displayString("Distance =");
+	while(1)
+	{
+		distance = Ultrasonic_readDistance();
+		LCD_moveCursor(0 ,11);
+		LCD_displayString("   ");
+		LCD_intgerToString(distance);
+		_delay_ms(50);
+	}
+}

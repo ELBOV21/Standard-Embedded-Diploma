@@ -1,0 +1,34 @@
+/******************************************************************************
+ *
+ * Module: BUZZER
+ *
+ * File Name: buzzer.h
+ *
+ * Description: Header file for BUZZER driver
+ *
+ * Author: Bavly Maged
+ *
+ *******************************************************************************/
+
+#ifndef HAL_BUZZER_H_
+#define HAL_BUZZER_H_
+#include"std_types.h"
+#include "common_macros.h"
+
+/*Buzzer Pin Configuration*/
+#define BUZZER_PORT_ID PORTC_ID
+#define BUZZER_PIN_ID  PIN5_ID
+/*Fucntion stets port direction to output
+ * and initilazes Buzzer as off
+ * */
+void Buzzer_init(void);
+/*
+ * Function turns the buzzer on
+ * */
+void Buzzer_on(void);
+/*
+ * Function turns the buzzer off
+ * */
+void Buzzer_off(void);
+
+#endif /* HAL_BUZZER_H_ */

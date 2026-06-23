@@ -1,0 +1,92 @@
+/*
+ * main.c
+ *
+ *  Created on: Sep 28, 2025
+ *      Author: bavly
+ */
+
+#include "../HAL/buzzer.h"
+#include "../HAL/lcd.h"
+#include "../HAL/ultrasonic.h"
+#include "../HAL/led.h"
+#include "../MCAL/std_types.h"
+#include <util/delay.h>
+#include <avr/io.h>
+
+uint16 distance=0;
+int main(void)
+{
+	SREG |= (1<<7);
+	LEDS_init();
+	Ultrasonic_init();
+	Buzzer_init();
+	LCD_init();
+	LCD_displayString("Distance=");
+
+	while(1)
+	{
+		_delay_ms(50);
+		distance = Ultrasonic_readDistance();
+		LCD_moveCursor(0 ,10);
+		LCD_displayString("     ");
+		LCD_moveCursor(0 ,10);
+		LCD_intgerToString(distance);
+		LCD_displayString("cm");
+
+		if(distance > 20)
+		{
+			LED_off(RED_LED);
+			LED_off(GREEN_LED);
+			LED_off(BLUE_LED);
+			Buzzer_off();
+			LCD_moveCursor(1, 0);
+			LCD_displayString("                "); // clear line
+		}
+		else if (distance <= 20 && distance>= 16)
+		{
+			LED_on(RED_LED);
+			LED_off(GREEN_LED);
+			LED_off(BLUE_LED);
+			Buzzer_off();
+			LCD_moveCursor(1, 0);
+			LCD_displayString("               "); // clear line
+		}
+		else if (distance <= 15 && distance>= 11)
+		{
+			LED_on(RED_LED);
+			LED_on(GREEN_LED);
+			LED_off(BLUE_LED);
+			Buzzer_off();
+			LCD_moveCursor(1, 0);
+			LCD_displayString("            "); // clear line
+		}
+		else if (distance <= 10 && distance>= 6)
+		{
+			LED_on(RED_LED);
+			LED_on(GREEN_LED);
+			LED_on(BLUE_LED);
+			Buzzer_off();
+			LCD_moveCursor(1, 0);
+			LCD_displayString("                "); // clear line
+		}
+		else if (distance <= 5 )
+		{
+			LCD_moveCursor(1 ,6);
+			LCD_displayString("Stop !!");
+			LED_on(RED_LED);
+			LED_on(GREEN_LED);
+			LED_on(BLUE_LED);
+			Buzzer_on();
+			_delay_ms(500);
+			LED_off(RED_LED);
+			LED_off(GREEN_LED);
+			LED_off(BLUE_LED);
+			Buzzer_off();
+		}
+
+
+
+
+
+	}
+}

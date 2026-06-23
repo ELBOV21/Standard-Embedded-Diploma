@@ -1,0 +1,32 @@
+/******************************************************************************
+ *
+ * Module: HC-SR04 (ultrasonic sensor)
+ *
+ * File Name: ultrasonic.h
+ *
+ * Description: Header file for the HC-SR04 (ultrasonic sensor) driver
+ *
+ * Author: Bavly Maged Naguib
+ *
+ *******************************************************************************/
+
+
+#ifndef APP_H_
+#define APP_H_
+
+#include "../MCAL/std_types.h"
+/*
+ * Function initializes
+ * 1)led
+ * 2)lcd
+ * 3)buzzer
+ * 4)ultasonic
+ * */
+void APP_init(void);
+
+/*
+ * function updates system parameters
+ * */
+void APP_update(void);
+
+#endif /* APP_H_ */

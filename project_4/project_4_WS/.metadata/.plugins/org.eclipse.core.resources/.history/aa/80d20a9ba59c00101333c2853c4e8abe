@@ -1,0 +1,22 @@
+/*
+ * main.c
+ *
+ *  Created on: Sep 28, 2025
+ *      Author: bavly
+ */
+
+#include "../HAL/buzzer.h"
+#include "../HAL/lcd.h"
+#include "../HAL/ultrasonic.h"
+#include "../HAL/led.h"
+#include "../MCAL/std_types.h"
+int main(void)
+{
+
+
+	while(1)
+
+	{
+
+	}
+}
